@@ -53,13 +53,18 @@ function getCityInfo(city) {
     })
     .then(function (data) {
 
-      console.log(data)
+      console.log(data.cod)
+
+      if (data.cod === 200) {
 
       // Calls function to generate the Current Weather Tab
       currentWeather(data.name, Math.round(data.main.temp), Math.round(data.main.feels_like), Math.round(data.wind.speed), data.main.humidity)
 
       // Calls function to generate and determine the Five Day Forcast
       generateFiveDayForcast(data.coord.lat, data.coord.lon);
+      } else {
+        alert("Not a city")
+      }
 
     })
 }
