@@ -24,6 +24,9 @@
 // https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=b590e1e6cab1a4667e5be277471ec18c"
 // "https://api.openweathermap.org/data/2.5/weather?id=524901&appid=b590e1e6cab1a4667e5be277471ec18c"
 
+var currentWeatherDiv = $("#currentWeatherDiv")
+var dateToday = dayjs().format("(M/D/YYYY)");
+
 
 
 getCityInfo("Minneapolis");
@@ -45,11 +48,12 @@ function getCityInfo(city) {
         lat: data.coord.lat,
         lon: data.coord.lon,
         name: data.name,
-        temp: (data.main.temp),
+        temp: data.main.temp,
         humidity: data.main.humidity,
         weather: data.weather[0].main,
         wind_speed: data.wind.speed
       }
+      currentWeather(data.name, Math.round(data.main.temp), Math.round(data.wind.speed), data.main.humidity)
       getFiveDayForcast(cityInfo.lat, cityInfo.lon);
       console.log(cityInfo)
     })
@@ -98,4 +102,14 @@ function getFiveDayForcast(lat, lon) {
       }
       console.log(fiveDayForcast)
     })
+}
+
+// Generates the current weather div
+function currentWeather(cityName, temp, wind, humidity){
+  $(currentWeatherDiv).append(
+    $("<h3>").text(`${cityName} ${dateToday}`),
+    $("<p></p>").text(`Temp: ${temp}\xB0F`),
+    $("<p></p>").text(`Wind: ${wind}mph`),
+    $("<p></p>").text(`Humidity: ${humidity}%`)
+  )
 }
