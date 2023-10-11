@@ -25,13 +25,22 @@
 // "https://api.openweathermap.org/data/2.5/weather?id=524901&appid=b590e1e6cab1a4667e5be277471ec18c"
 
 var currentWeatherDiv = $("#currentWeatherDiv")
-var fiveDaySubDiv = $("#fiveDaySubDiv")
+var fiveDayMainDiv = $("#fiveDayMainDiv")
+var searchBtn = $("#searchBtn")
+var searchField = $("#searchField")
+
 var dateToday = dayjs()
-// .format("(M/D/YYYY)");
 
 
+searchBtn.on("click", search)
 
-getCityInfo("Minneapolis");
+// Uses user input to search for a particular cities weather
+function search() {
+  currentWeatherDiv.empty();
+  fiveDayMainDiv.empty();
+  getCityInfo(searchField.val().trim());
+}
+
 
 // Get Weather API
 function getCityInfo(city) {
@@ -43,19 +52,11 @@ function getCityInfo(city) {
       return response.json();
     })
     .then(function (data) {
-      // let cityInfo = {
-      //   lat: data.coord.lat,
-      //   lon: data.coord.lon,
-      //   name: data.name,
-      //   temp: data.main.temp,
-      //   humidity: data.main.humidity,
-      //   weather: data.weather[0].main,
-      //   wind_speed: data.wind.speed
-      // }
-      // console.log(cityInfo)
+
+      console.log(data)
 
       // Calls function to generate the Current Weather Tab
-      currentWeather(data.name, Math.round(data.main.temp), Math.round(data.wind.speed), data.main.humidity)
+      currentWeather(data.name, Math.round(data.main.temp), Math.round(data.main.feels_like), Math.round(data.wind.speed), data.main.humidity)
 
       // Calls function to generate and determine the Five Day Forcast
       generateFiveDayForcast(data.coord.lat, data.coord.lon);
@@ -64,10 +65,11 @@ function getCityInfo(city) {
 }
 
 // Generates the current weather div
-function currentWeather(cityName, temp, wind, humidity) {
+function currentWeather(cityName, temp, feelsLike, wind, humidity) {
   $(currentWeatherDiv).append(
     $("<h3>").text(`${cityName} ${dateToday.format("(M/D/YYYY)")}`),
     $("<p></p>").text(`Temp: ${temp}\xB0F`),
+    $("<p></p>").text(`Feels Like: ${feelsLike}\xB0F`),
     $("<p></p>").text(`Wind: ${wind}mph`),
     $("<p></p>").text(`Humidity: ${humidity}%`)
   )
@@ -84,17 +86,11 @@ function generateFiveDayForcast(lat, lon) {
       return response.json();
     })
     .then(function (data) {
-      // let fiveDayForcast = [];
       // Currently just grabbing the days 5th data point (12pm-2pm)
+      let subDiv = $("<div></div>").attr("id", "fiveDaySubDiv").addClass("row")
+      let sectionHead = $("<h3></h3>").text("5-day Forcast")
+
       for (i = 5; i < 40; i += 8) {
-        // let singleDayForcast = {
-        //   humidity: data.list[i].main.humidity,
-        //   temp_max: data.list[i].main.temp_max,
-        //   temp_min: data.list[i].main.temp_min,
-        //   weather: data.list[i].weather[0].main,
-        //   wind_speed: data.list[i].wind.speed
-        // }
-        // fiveDayForcast.push(singleDayForcast)
         let dayCard = $("<div></div>");
         $(dayCard).append(
           $("<p></p>").text(`${dateToday.add(i, "day").format("M/D/YYYY")}`),
@@ -103,10 +99,10 @@ function generateFiveDayForcast(lat, lon) {
           $("<p></p>").text(`Wind: ${data.list[i].wind.speed}mph`),
           $("<p></p>").text(`Humidity: ${data.list[i].main.humidity}%`)
         )
-        $(dayCard).addClass("singleCard")
-        $(fiveDaySubDiv).append(dayCard)
+        $(dayCard).addClass("singleCard col-2");
+        $(subDiv).append(dayCard);
+        $(fiveDayMainDiv).append(sectionHead, subDiv);
       }
-      // console.log(fiveDayForcast)
     })
 }
 
