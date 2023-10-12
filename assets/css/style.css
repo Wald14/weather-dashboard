@@ -1,3 +1,13 @@
+/* 
+---CSS Order------------------------------
+1st) :root and *
+2nd) tag elements (alphabetical order)
+3rd) tag elements (class order)
+4th) tag elements (id order)
+------------------------------------------
+*/
+
+
 :root {
   --color1: #606C38;
   --color2: #283618;
@@ -5,6 +15,12 @@
   --color4: #DDA15E;
   --color5: #BC6C25;
 }
+
+img{
+  background: radial-gradient(circle, var(--color4) 0%, white 75%);
+  width: 70px;
+}
+
 
 header {
   text-align: center;
@@ -19,9 +35,25 @@ textarea {
   resize: none;
 }
 
+h2 {
+  font-size: 2rem;
+}
+
+.cityBtn {
+  background-color: var(--color4);
+  border:var(--color2);
+}
+
+
+.cityBtn:hover {
+  background-color: var(--color5);
+  border:var(--color2);
+}
+
 
 .singleCard {
-  border: solid black 1px
+  border: solid black 1px;
+  font-size: 0.9rem;
 }
 
 #searchBtn {
@@ -35,19 +67,14 @@ textarea {
   border:var(--color2);
 }
 
-.cityBtn {
-  background-color: var(--color4);
-  border:var(--color2);
-}
-
-.cityBtn:hover {
-  background-color: var(--color5);
-  border:var(--color2);
-}
 
 #searchDiv,
 #searchHistoryDiv {
-  border-top: 1px solid var(--color2);
   padding-top: 10px;
   margin: 10px;
+}
+
+
+#searchHistoryDiv {
+  border-top: 1px solid var(--color2);
 }

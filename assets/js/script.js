@@ -1,8 +1,7 @@
-// BUG: The textarea doesn't refresh when either the search or one of the saved city buttons is pressed
-
-// BUG: icons/imgs don't have "alt". Can add by pulling the description from the API. `Icon depicting ${x}`.
-
-// "BUG": Not mobile friendly
+// TODO: 
+// icons/imgs don't have "alt". Can add by pulling the description from the API. `Icon depicting ${x}`.
+// CSS to make mobile friendly
+// CSS in general
 
 
 var currentWeatherDiv = $("#currentWeatherDiv")
@@ -23,7 +22,7 @@ function loadSeachHistory() {
   if (searchedCities === null) {
     searchedCities = [];
   }
-  // $(searchHistoryDiv).append($("<h3>Search History</h>"))
+  // $(searchHistoryDiv).append($("<h2>Search History</h2>"))
   for (var i = 0; i < searchedCities.length; i++) {
     $(searchHistoryDiv).append(
       $("<button></button>").attr("class", "cityBtn").attr("value", searchedCities[i]).addClass("btn btn-primary").text(searchedCities[i])
@@ -47,7 +46,6 @@ function search() {
 
 // Get Weather API
 function getCityInfo(city) {
-
   let requestCity = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=b590e1e6cab1a4667e5be277471ec18c`
 
   fetch(requestCity)
@@ -66,6 +64,10 @@ function getCityInfo(city) {
 
         // Calls function to generate and determine the Five Day Forcast
         generateFiveDayForcast(data.coord.lat, data.coord.lon);
+
+
+        // Clear search textarea
+        $(searchField).val("");
 
         // If city is already in the array, remove it so it'll get added again to the front
         if (searchedCities.indexOf(data.name) > -1) {
@@ -90,7 +92,6 @@ function getCityInfo(city) {
       } else {
         alert("City not found. Please try again.")
       }
-
     })
 }
 
@@ -98,8 +99,8 @@ function getCityInfo(city) {
 // Generates the current weather div
 function currentWeather(cityName, temp, feelsLike, wind, humidity, icon) {
   $(currentWeatherDiv).append(
-    $("<h3></h3>").text(`${cityName} ${dateToday.format("(dddd, MMM Do)")}`).append(
-      $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
+    $("<h2></h2>").text(`${cityName} ${dateToday.format("(dddd, MMM Do)")}`).append(
+      $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`).addClass("todayIcon")
     ),
     $("<p></p>").text(`Temp: ${temp}\xB0F`),
     $("<p></p>").text(`Feels Like: ${feelsLike}\xB0F`),
@@ -122,16 +123,16 @@ function generateFiveDayForcast(lat, lon) {
     .then(function (data) {
       // Currently just grabbing the days 5th data point (12pm-2pm)
       let subDiv = $("<div></div>").attr("id", "fiveDaySubDiv").addClass("row")
-      let sectionHead = $("<h3></h3>").text("5-day Forcast")
+      let sectionHead = $("<h2></h2>").text("5-day Forcast")
 
       for (i = 5; i < 40; i += 8) {
         let dayCard = $("<div></div>");
         $(dayCard).append(
           $("<p></p>").text(`${dateToday.add(i, "day").format("dddd, MMM Do")}`),
           $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`),
-          $("<p></p>").text(`High: ${data.list[i].main.temp_max}\xB0F`),
-          $("<p></p>").text(`Low: ${data.list[i].main.temp_min}\xB0F`),
-          $("<p></p>").text(`Wind: ${data.list[i].wind.speed}mph`),
+          $("<p></p>").text(`High: ${Math.round(data.list[i].main.temp_max)}\xB0F`),
+          $("<p></p>").text(`Low: ${Math.round(data.list[i].main.temp_min)}\xB0F`),
+          $("<p></p>").text(`Wind: ${Math.round(data.list[i].wind.speed)}mph`),
           $("<p></p>").text(`Humidity: ${data.list[i].main.humidity}%`)
         )
         $(dayCard).addClass("singleCard col-2");
@@ -160,7 +161,7 @@ Gives 40 data points, 8 per day
         Set 2: 3am - 5am
         Set 3: 6am - 8am
         Set 4: 9am - 11am
-        Set 5: 12pm - 2pm
+        ***Set 5: 12pm - 2pm***
         Set 6: 3pm - 5pm
         Set 7: 6pm - 8pm
         Set 8: 9pm - 11pm
