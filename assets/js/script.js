@@ -1,3 +1,10 @@
+// BUG: The textarea doesn't refresh when either the search or one of the saved city buttons is pressed
+
+// BUG: icons/imgs don't have "alt". Can add by pulling the description from the API. `Icon depicting ${x}`.
+
+// "BUG": Not mobile friendly
+
+
 var currentWeatherDiv = $("#currentWeatherDiv")
 var fiveDayMainDiv = $("#fiveDayMainDiv")
 var searchBtn = $("#searchBtn")
@@ -19,7 +26,7 @@ function loadSeachHistory() {
   // $(searchHistoryDiv).append($("<h3>Search History</h>"))
   for (var i = 0; i < searchedCities.length; i++) {
     $(searchHistoryDiv).append(
-      $("<button></button>").attr("class", "cityBtn").attr("value", searchedCities[i]).text(searchedCities[i])
+      $("<button></button>").attr("class", "cityBtn").attr("value", searchedCities[i]).addClass("btn btn-primary").text(searchedCities[i])
     )
   }
 
