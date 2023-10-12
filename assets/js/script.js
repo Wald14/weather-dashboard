@@ -24,7 +24,7 @@ function loadSeachHistory() {
   if (searchedCities === null) {
     searchedCities = [];
   }
-  $(searchHistoryDiv).append($("<h3>Search History</h>"))
+  // $(searchHistoryDiv).append($("<h3>Search History</h>"))
   for (var i = 0; i < searchedCities.length; i++) {
     $(searchHistoryDiv).append(
       $("<button></button>").text(searchedCities[i])
@@ -64,9 +64,30 @@ function getCityInfo(city) {
         // Calls function to generate and determine the Five Day Forcast
         generateFiveDayForcast(data.coord.lat, data.coord.lon);
 
-        // Save city name to local storage
-        searchedCities.push(data.name)
+        
+        // If city is already in the array, remove it so it'll get added again to the front
+        if (searchedCities.indexOf(data.name) > -1) {
+          console.log("already in array")
+          var removedCity = searchedCities.splice(searchedCities.indexOf(data.name), 1);
+          removedCity = [];
+        }
+
+        // Add city to the top of the search list
+        searchedCities.unshift(data.name)
+
+        // Remove any cities after Top 5 recent searches
+        while (searchedCities.length > 5) {
+          searchedCities.pop();
+        }
+
+
+        // Save city name to array and then that array to local storage
         localStorage.setItem("Weather-Dashboard-Cities", JSON.stringify(searchedCities));
+        
+
+
+
+
 
         // load newly saved buttons
         loadSeachHistory();
@@ -122,21 +143,6 @@ function generateFiveDayForcast(lat, lon) {
 
 
 searchBtn.on("click", search)
-
-
-
-
-
-// TODO
-
-// Function to generate emoji
-// Function to clear search history
-// Function Load from local storage
-// Prevent duplicate search history buttons
-// Reorder so most recent is at the front
-// Delete anything passed 5 searches
-// CSS and mobile classes
-
 
 
 
