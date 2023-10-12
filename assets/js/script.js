@@ -31,13 +31,15 @@ var searchField = $("#searchField")
 
 var dateToday = dayjs()
 
+var searchedCities = []
+
 
 searchBtn.on("click", search)
 
 // Uses user input to search for a particular cities weather
 function search() {
-  currentWeatherDiv.empty();
-  fiveDayMainDiv.empty();
+  // currentWeatherDiv.empty();
+  // fiveDayMainDiv.empty();
   getCityInfo(searchField.val().trim());
 }
 
@@ -56,14 +58,22 @@ function getCityInfo(city) {
       console.log(data.cod)
 
       if (data.cod === 200) {
+        // Removes old city weather data
+        currentWeatherDiv.empty();
+        fiveDayMainDiv.empty();
 
-      // Calls function to generate the Current Weather Tab
-      currentWeather(data.name, Math.round(data.main.temp), Math.round(data.main.feels_like), Math.round(data.wind.speed), data.main.humidity)
+        // Calls function to generate the Current Weather Tab
+        currentWeather(data.name, Math.round(data.main.temp), Math.round(data.main.feels_like), Math.round(data.wind.speed), data.main.humidity)
 
-      // Calls function to generate and determine the Five Day Forcast
-      generateFiveDayForcast(data.coord.lat, data.coord.lon);
+        // Calls function to generate and determine the Five Day Forcast
+        generateFiveDayForcast(data.coord.lat, data.coord.lon);
+
+        // Save city name to local storage
+        searchedCities.push(data.name)
+        localStorage.setItem("Weather-Dashboard-Cities", JSON.stringify(searchedCities));
+
       } else {
-        alert("Not a city")
+        alert("City not found. Please try again.")
       }
 
     })
@@ -111,13 +121,16 @@ function generateFiveDayForcast(lat, lon) {
     })
 }
 
+
+
+
+
+// TODO
+
 // Function to generate emoji
-
-// Search Function
-
-// Save to local storage
-
-// Load from local storage
+// Function Load from local storage
+// Function to clear search history
+// CSS and mobile classes
 
 
 
