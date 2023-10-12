@@ -1,11 +1,3 @@
-// Function to generate emoji
-// Function to clear search history
-  // Prevent duplicate search history buttons
-  // Reorder so most recent is at the front
-  // Delete anything passed 5 searches
-// CSS and mobile classes
-
-
 var currentWeatherDiv = $("#currentWeatherDiv")
 var fiveDayMainDiv = $("#fiveDayMainDiv")
 var searchBtn = $("#searchBtn")
@@ -13,7 +5,7 @@ var searchField = $("#searchField")
 var searchHistoryDiv = $("#searchHistoryDiv")
 
 var dateToday = dayjs();
-
+var startUpLoaded = false;
 var searchedCities = [];
 
 
@@ -27,8 +19,14 @@ function loadSeachHistory() {
   // $(searchHistoryDiv).append($("<h3>Search History</h>"))
   for (var i = 0; i < searchedCities.length; i++) {
     $(searchHistoryDiv).append(
-      $("<button></button>").text(searchedCities[i])
+      $("<button></button>").attr("class", "cityBtn").attr("value", searchedCities[i]).text(searchedCities[i])
     )
+  }
+
+  // Loads the last saved city on page load
+  if (startUpLoaded === false && searchedCities.length > 0) {
+    startUpLoaded = true;
+    getCityInfo(searchedCities[0])
   }
 }
 loadSeachHistory();
@@ -50,24 +48,20 @@ function getCityInfo(city) {
       return response.json();
     })
     .then(function (data) {
-
-      console.log(data.cod)
-
+      console.log(data)
       if (data.cod === 200) {
         // Removes old city weather data
         currentWeatherDiv.empty();
         fiveDayMainDiv.empty();
 
         // Calls function to generate the Current Weather Tab
-        currentWeather(data.name, Math.round(data.main.temp), Math.round(data.main.feels_like), Math.round(data.wind.speed), data.main.humidity)
+        currentWeather(data.name, Math.round(data.main.temp), Math.round(data.main.feels_like), Math.round(data.wind.speed), data.main.humidity, data.weather[0].icon)
 
         // Calls function to generate and determine the Five Day Forcast
         generateFiveDayForcast(data.coord.lat, data.coord.lon);
 
-        
         // If city is already in the array, remove it so it'll get added again to the front
         if (searchedCities.indexOf(data.name) > -1) {
-          console.log("already in array")
           var removedCity = searchedCities.splice(searchedCities.indexOf(data.name), 1);
           removedCity = [];
         }
@@ -80,14 +74,8 @@ function getCityInfo(city) {
           searchedCities.pop();
         }
 
-
         // Save city name to array and then that array to local storage
         localStorage.setItem("Weather-Dashboard-Cities", JSON.stringify(searchedCities));
-        
-
-
-
-
 
         // load newly saved buttons
         loadSeachHistory();
@@ -99,16 +87,20 @@ function getCityInfo(city) {
     })
 }
 
+
 // Generates the current weather div
-function currentWeather(cityName, temp, feelsLike, wind, humidity) {
+function currentWeather(cityName, temp, feelsLike, wind, humidity, icon) {
   $(currentWeatherDiv).append(
-    $("<h3>").text(`${cityName} ${dateToday.format("(M/D/YYYY)")}`),
+    $("<h3></h3>").text(`${cityName} ${dateToday.format("(dddd, MMM Do)")}`).append(
+      $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
+    ),
     $("<p></p>").text(`Temp: ${temp}\xB0F`),
     $("<p></p>").text(`Feels Like: ${feelsLike}\xB0F`),
     $("<p></p>").text(`Wind: ${wind}mph`),
     $("<p></p>").text(`Humidity: ${humidity}%`)
   )
 }
+
 
 // Get Five Day Forcast
 function generateFiveDayForcast(lat, lon) {
@@ -128,7 +120,8 @@ function generateFiveDayForcast(lat, lon) {
       for (i = 5; i < 40; i += 8) {
         let dayCard = $("<div></div>");
         $(dayCard).append(
-          $("<p></p>").text(`${dateToday.add(i, "day").format("M/D/YYYY")}`),
+          $("<p></p>").text(`${dateToday.add(i, "day").format("dddd, MMM Do")}`),
+          $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`),
           $("<p></p>").text(`High: ${data.list[i].main.temp_max}\xB0F`),
           $("<p></p>").text(`Low: ${data.list[i].main.temp_min}\xB0F`),
           $("<p></p>").text(`Wind: ${data.list[i].wind.speed}mph`),
@@ -143,6 +136,12 @@ function generateFiveDayForcast(lat, lon) {
 
 
 searchBtn.on("click", search)
+
+// $("#searchHistoryDiv").on("click", ".cityBtn", getCityInfo(this.value)
+// )
+$("#searchHistoryDiv").on("click", ".cityBtn", function(){
+  getCityInfo(this.value)}
+)
 
 
 

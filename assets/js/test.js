@@ -7,3 +7,6 @@ console.log(array)
 removedCity = []
 
 console.log(removedCity)
+
+var x;
+console.log(x)
