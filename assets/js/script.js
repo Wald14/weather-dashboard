@@ -1,45 +1,41 @@
-// Search Bar for cities
+// Function to generate emoji
+// Function to clear search history
+  // Prevent duplicate search history buttons
+  // Reorder so most recent is at the front
+  // Delete anything passed 5 searches
+// CSS and mobile classes
 
-// Save the city into local storage 
-// Add to front of array
-// If not already searched for, move to front
-// load historical cities
-
-// load current weather:
-// an icon for current weather condition, 
-// time loaded
-// temp
-// humidity
-// wind speed
-
-// load 5 day forcast and display
-// date
-// icon for weather condition
-// temp
-// humidity
-// wind speed
-
-//  need to replace the lat and lon in this based off the Geocoding API
-//  info on api https://openweathermap.org/current
-// https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=b590e1e6cab1a4667e5be277471ec18c"
-// "https://api.openweathermap.org/data/2.5/weather?id=524901&appid=b590e1e6cab1a4667e5be277471ec18c"
 
 var currentWeatherDiv = $("#currentWeatherDiv")
 var fiveDayMainDiv = $("#fiveDayMainDiv")
 var searchBtn = $("#searchBtn")
 var searchField = $("#searchField")
+var searchHistoryDiv = $("#searchHistoryDiv")
 
-var dateToday = dayjs()
+var dateToday = dayjs();
 
-var searchedCities = []
+var searchedCities = [];
 
 
-searchBtn.on("click", search)
+// Load Search History and generate a button for each, clearing out any old list of buttons
+function loadSeachHistory() {
+  searchHistoryDiv.empty();
+  searchedCities = JSON.parse(localStorage.getItem("Weather-Dashboard-Cities"));
+  if (searchedCities === null) {
+    searchedCities = [];
+  }
+  $(searchHistoryDiv).append($("<h3>Search History</h>"))
+  for (var i = 0; i < searchedCities.length; i++) {
+    $(searchHistoryDiv).append(
+      $("<button></button>").text(searchedCities[i])
+    )
+  }
+}
+loadSeachHistory();
+
 
 // Uses user input to search for a particular cities weather
 function search() {
-  // currentWeatherDiv.empty();
-  // fiveDayMainDiv.empty();
   getCityInfo(searchField.val().trim());
 }
 
@@ -71,6 +67,9 @@ function getCityInfo(city) {
         // Save city name to local storage
         searchedCities.push(data.name)
         localStorage.setItem("Weather-Dashboard-Cities", JSON.stringify(searchedCities));
+
+        // load newly saved buttons
+        loadSeachHistory();
 
       } else {
         alert("City not found. Please try again.")
@@ -122,14 +121,20 @@ function generateFiveDayForcast(lat, lon) {
 }
 
 
+searchBtn.on("click", search)
+
+
 
 
 
 // TODO
 
 // Function to generate emoji
-// Function Load from local storage
 // Function to clear search history
+// Function Load from local storage
+// Prevent duplicate search history buttons
+// Reorder so most recent is at the front
+// Delete anything passed 5 searches
 // CSS and mobile classes
 
 
