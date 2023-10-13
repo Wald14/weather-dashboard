@@ -25,9 +25,12 @@ function loadSeachHistory() {
   // $(searchHistoryDiv).append($("<h2>Search History</h2>"))
   for (var i = 0; i < searchedCities.length; i++) {
     $(searchHistoryDiv).append(
-      $("<button></button>").attr("class", "cityBtn").attr("value", searchedCities[i]).addClass("btn btn-primary").text(searchedCities[i])
+      $("<button></button>").attr("value", searchedCities[i]).addClass("btn btn-primary cityBtn").text(searchedCities[i])
     )
   }
+  $(searchHistoryDiv).append(
+    $("<button></button>").addClass("btn btn-primary clearHistoryBtn").text("Clear Search History")
+  )
 
   // Loads the last saved city on page load
   if (startUpLoaded === false && searchedCities.length > 0) {
@@ -100,12 +103,12 @@ function getCityInfo(city) {
 function currentWeather(cityName, temp, feelsLike, wind, humidity, icon) {
   $(currentWeatherDiv).append(
     $("<h2></h2>").text(`${cityName} ${dateToday.format("(dddd, MMM Do)")}`).append(
-      $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`).addClass("todayIcon")
+      $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`).addClass("todayIcon").attr("alt", "Icon depicting the weather")
     ),
     $("<p></p>").text(`Temp: ${temp}\xB0F`),
     $("<p></p>").text(`Feels Like: ${feelsLike}\xB0F`),
     $("<p></p>").text(`Wind: ${wind}mph`),
-    $("<p></p>").text(`Humidity: ${humidity}%`)
+    $("<p></p>").text(`Humidity: ${humidity}%`).addClass("last-p")
   )
 }
 
@@ -129,13 +132,13 @@ function generateFiveDayForcast(lat, lon) {
         let dayCard = $("<div></div>");
         $(dayCard).append(
           $("<p></p>").text(`${dateToday.add(i, "day").format("dddd, MMM Do")}`),
-          $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`),
+          $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`).attr("alt", "Icon depicting the weather"),
           $("<p></p>").text(`High: ${Math.round(data.list[i].main.temp_max)}\xB0F`),
           $("<p></p>").text(`Low: ${Math.round(data.list[i].main.temp_min)}\xB0F`),
           $("<p></p>").text(`Wind: ${Math.round(data.list[i].wind.speed)}mph`),
           $("<p></p>").text(`Humidity: ${data.list[i].main.humidity}%`)
         )
-        $(dayCard).addClass("singleCard col-2");
+        $(dayCard).addClass("singleCard col-12 col-sm-2");
         $(subDiv).append(dayCard);
         $(fiveDayMainDiv).append(sectionHead, subDiv);
       }
@@ -145,8 +148,12 @@ function generateFiveDayForcast(lat, lon) {
 
 searchBtn.on("click", search)
 
-// $("#searchHistoryDiv").on("click", ".cityBtn", getCityInfo(this.value)
-// )
+$("#searchHistoryDiv").on("click", ".clearHistoryBtn", function() {
+  searchHistoryDiv.empty()
+  searchedCities = []
+  localStorage.removeItem("Weather-Dashboard-Cities")
+})
+
 $("#searchHistoryDiv").on("click", ".cityBtn", function(){
   getCityInfo(this.value)}
 )
