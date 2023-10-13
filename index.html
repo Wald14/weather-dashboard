@@ -10,14 +10,12 @@
   <link rel="stylesheet" href="./assets/css/style.css"/>
   <title>Weather Dashboard</title>
 </head>
-
-
 <body>
   <header>
     <h1>Weather Dashboard</h1>
   </header>
-
   <main class="row">
+    <!-- Search and Search History -->
     <aside class="col-12 col-md-3">
       <div id="searchDiv" class="d-grid gap-2">
         <h2>Search for a City:</h2>
@@ -26,13 +24,12 @@
       </div>
       <div id="searchHistoryDiv" class="d-grid gap-2"></div>
     </aside>
-
+    <!-- Current Weather and 5-day Forcast -->
     <section class="col-12 col-md-9">
       <div id="currentWeatherDiv"></div>
       <div id="fiveDayMainDiv"></div>
     </section>
   </main>
-
   <!-- JQuery / day.js-->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script

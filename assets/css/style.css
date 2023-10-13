@@ -6,7 +6,6 @@
   --color5: #BC6C25;
 }
 
-
 header {
   text-align: center;
   font-size: 3rem;
@@ -14,7 +13,6 @@ header {
   background-color: var(--color2);
   color: var(--color3)
 }
-
 
 img {
   background: radial-gradient(circle, var(--color4) 0%, white 75%);
@@ -25,7 +23,6 @@ img {
   background: radial-gradient(circle, var(--color2) 0%, var(--color1) 75%);
   width: 75px;
 }
-
 
 textarea {
   resize: none;
@@ -40,18 +37,15 @@ h2 {
   padding-left: 50px;
 }
 
-
 .cityBtn {
   background-color: var(--color4);
   border:var(--color2);
 }
 
-
 .cityBtn:hover {
   background-color: var(--color5);
   border:var(--color2);
 }
-
 
 .clearHistoryBtn {
   background-color: var(--color3);
@@ -80,7 +74,6 @@ h2 {
   margin: 10px auto;
 }
 
-
 #currentWeatherDiv {
   margin: 0px 30px 30px 30px;
 }
@@ -89,25 +82,21 @@ h2 {
   padding: 0px 50px;
 }
 
-
 #searchBtn {
   background-color: var(--color1);
   border:var(--color2);
 }
-
 
 #searchBtn:hover {
   background-color: var(--color2);
   border:var(--color2);
 }
 
-
 #searchDiv,
 #searchHistoryDiv {
   padding-top: 10px;
   margin: 10px;
 }
-
 
 #searchHistoryDiv {
   border-top: 1px solid var(--color2);

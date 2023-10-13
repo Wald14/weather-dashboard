@@ -1,15 +1,8 @@
-// TODO: 
-// icons/imgs don't have "alt". Can add by pulling the description from the API. `Icon depicting ${x}`.
-// CSS to make mobile friendly
-// CSS in general
-
-
 var currentWeatherDiv = $("#currentWeatherDiv")
 var fiveDayMainDiv = $("#fiveDayMainDiv")
 var searchBtn = $("#searchBtn")
 var searchField = $("#searchField")
 var searchHistoryDiv = $("#searchHistoryDiv")
-
 var dateToday = dayjs();
 var startUpLoaded = false;
 var searchedCities = [];
@@ -67,7 +60,6 @@ function getCityInfo(city) {
 
         // Calls function to generate and determine the Five Day Forcast
         generateFiveDayForcast(data.coord.lat, data.coord.lon);
-
 
         // Clear search textarea
         $(searchField).val("");
@@ -133,8 +125,7 @@ function generateFiveDayForcast(lat, lon) {
         $(dayCard).append(
           $("<p></p>").text(`${dateToday.add(i, "day").format("dddd, MMM Do")}`),
           $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`).attr("alt", "Icon depicting the weather"),
-          $("<p></p>").text(`High: ${Math.round(data.list[i].main.temp_max)}\xB0F`),
-          $("<p></p>").text(`Low: ${Math.round(data.list[i].main.temp_min)}\xB0F`),
+          $("<p></p>").text(`Temp: ${Math.round(data.list[i].main.temp_max)}\xB0F`),
           $("<p></p>").text(`Wind: ${Math.round(data.list[i].wind.speed)}mph`),
           $("<p></p>").text(`Humidity: ${data.list[i].main.humidity}%`)
         )
@@ -148,32 +139,14 @@ function generateFiveDayForcast(lat, lon) {
 
 searchBtn.on("click", search)
 
+
 $("#searchHistoryDiv").on("click", ".clearHistoryBtn", function() {
   searchHistoryDiv.empty()
   searchedCities = []
   localStorage.removeItem("Weather-Dashboard-Cities")
 })
 
+
 $("#searchHistoryDiv").on("click", ".cityBtn", function(){
   getCityInfo(this.value)}
 )
-
-
-
-
-/*
-Gives 40 data points, 8 per day
-    Day 1: 0-7
-        Set 1: 12am - 2am
-        Set 2: 3am - 5am
-        Set 3: 6am - 8am
-        Set 4: 9am - 11am
-        ***Set 5: 12pm - 2pm***
-        Set 6: 3pm - 5pm
-        Set 7: 6pm - 8pm
-        Set 8: 9pm - 11pm
-    Day 2: 8-15
-    Day 3: 16-23
-    Day 4: 24-31
-    Day 5: 32-39
-*/
