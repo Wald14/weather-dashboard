@@ -120,10 +120,10 @@ function generateFiveDayForcast(lat, lon) {
       let subDiv = $("<div></div>").attr("id", "fiveDaySubDiv").addClass("row")
       let sectionHead = $("<h2></h2>").text("5-day Forcast")
 
-      for (i = 5; i < 40; i += 8) {
+      for (i = 5, j=1; i < 40; i += 8, j++) {
         let dayCard = $("<div></div>");
         $(dayCard).append(
-          $("<p></p>").text(`${dateToday.add(i, "day").format("dddd, MMM Do")}`),
+          $("<p></p>").text(`${dateToday.add(j, "day").format("dddd, MMM Do")}`),
           $("<img></img>").attr("src", `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`).attr("alt", "Icon depicting the weather"),
           $("<p></p>").text(`Temp: ${Math.round(data.list[i].main.temp_max)}\xB0F`),
           $("<p></p>").text(`Wind: ${Math.round(data.list[i].wind.speed)}mph`),
